@@ -1,0 +1,116 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Subway Map</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="../jquery.subwayMap-0.5.0.js"></script>
+    <style type="text/css">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Verdana;
+            font-size: 8pt;
+        }
+
+        /* The main DIV for the map */
+
+        .subway-map {
+            margin: auto;
+            width: 100%;
+            height: 410px;
+            background-color: white;
+        }
+
+        /* Text labels */
+
+        .text {
+            text-decoration: none;
+            color: rgb(134, 24, 24);
+            font-size: 14;
+            font-weight: bolder;
+        }
+
+        #legend {
+            float: left;
+            width: 250px;
+            height: 400px;
+        }
+
+        #legend div {
+            height: 25px;
+        }
+
+        #legend span {
+            margin: 5px 5px 5px 0;
+        }
+
+        .subway-map span {
+            margin: 5px 5px 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <canvas id="myCanvas" width="600" height="400" style="border:1px solid #000000;">
+        </canvas>
+
+
+        <canvas id="image_canvas" width="600" height="400" style="border:1px solid #000000;">
+        </canvas>
+
+    </div>
+</body>
+
+<script>
+
+    function draw() {
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "#FF0000";
+
+        //draw rect
+        ctx.fillRect(0, 0, 150, 75);
+
+        //draw line
+        ctx.moveTo(0, 0);
+        ctx.lineTo(400, 500);
+        ctx.stroke();
+
+        //Draw circle
+        ctx.beginPath();
+        ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        //Draw arc
+        ctx.moveTo(300, 300);
+        ctx.arc(300, 300, 50, 0, 0.5 * Math.PI);
+        ctx.stroke();
+        ctx.closePath();
+
+        //draw text
+        ctx.font = "30px Arial";
+        ctx.fillText("Hello World", 10, 350);
+
+        ctx.font = "30px Arial";
+        ctx.strokeText("Hello World", 10, 200);
+
+
+        // fill  Gradient
+        var grd = ctx.createLinearGradient(0, 0, 200, 0);
+        grd.addColorStop(0, "red");
+        grd.addColorStop(1, "blue");
+
+        // fill  Gradient
+        ctx.fillStyle = grd;
+        ctx.fillRect(210, 110, 150, 80);
+
+        //draw image
+
+
+
+    }
+
+    draw();
+
+</script>
+
+</html>
