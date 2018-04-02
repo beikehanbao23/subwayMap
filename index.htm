@@ -46,6 +46,9 @@
             margin: 5px 5px 5px 0;
         }
 
+        button:focus {  
+            outline:none;  
+        }  
 
         canvas {
             border: 1px solid #000000;
@@ -55,7 +58,7 @@
 
 <body>
     <div class="subway-map" data-columns="30" data-rows="20" data-cellSize="40" data-legendId="legend" data-textClass="text"
-        data-gridNumbers="true" data-grid="false" data-lineWidth="8">
+        data-gridNumbers="true" data-grid="true" data-lineWidth="6">
         <ul data-color="#ff4db2" data-label="jQuery Widgets">
             <li data-coords="2,2" data-marker="interchange">
                 <a href="http://jqueryui.com/demos/accordion/">Accordion</a>
@@ -101,7 +104,14 @@
     <div id="legend"></div>
 
 
+
     <script type="text/javascript">
+
+        function a(arg){
+            alert("a function");
+            // console.log(arg);
+        }
+
         $(".subway-map").subwayMap({ debug: true });
     </script>
 </body>

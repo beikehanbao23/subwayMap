@@ -332,13 +332,20 @@ THE SOFTWARE.
         ctx.strokeStyle = fgColor;
         ctx.fillStyle = bgColor;
         ctx.beginPath();
+
+        var posMarker="";
+        var markerScale = 0.7 ;
+        //min width /height  of button
+        var clickableLen=16;
+
+        if(width * markerScale/2 > 16) clickableLen = parseInt(width * markerScale/2);
+        if(width * markerScale/2 > 24) clickableLen = 24;
         switch(data.marker.toLowerCase())
         {
             case "interchange":
             case "@interchange":
                 ctx.lineWidth = width;
-                if (data.markerInfo == "")
-                    ctx.arc(x, y, width * 0.7, 0, Math.PI * 2, true);
+                if (data.markerInfo == "") ctx.arc(x, y, width * markerScale, 0, Math.PI * 2, true);
                 else
                 {
                     var mDir = data.markerInfo.substr(0,1).toLowerCase();
@@ -347,17 +354,17 @@ THE SOFTWARE.
                     {
                         if (mDir == "v")
                         {
-                            ctx.arc(x, y, width * 0.7,290 * Math.PI/180, 250 * Math.PI/180, false);
-                            ctx.arc(x, y-(width*mSize), width * 0.7,110 * Math.PI/180, 70 * Math.PI/180, false);
+                            ctx.arc(x, y, width * markerScale,290 * Math.PI/180, 250 * Math.PI/180, false);
+                            ctx.arc(x, y-(width*mSize), width * markerScale,110 * Math.PI/180, 70 * Math.PI/180, false);
                         }
                         else
                         {
-                            ctx.arc(x, y, width * 0.7,20 * Math.PI/180, 340 * Math.PI/180, false);
-                            ctx.arc(x+(width*mSize), y, width * 0.7,200 * Math.PI/180, 160 * Math.PI/180, false);
+                            ctx.arc(x, y, width * markerScale,20 * Math.PI/180, 340 * Math.PI/180, false);
+                            ctx.arc(x+(width*mSize), y, width * markerScale,200 * Math.PI/180, 160 * Math.PI/180, false);
                         }
                     }
                     else
-                        ctx.arc(x, y, width * 0.7, 0, Math.PI * 2, true);
+                        ctx.arc(x, y, width * markerScale, 0, Math.PI * 2, true);
                 }
                 break;
             case "station":
@@ -366,6 +373,11 @@ THE SOFTWARE.
                 ctx.arc(x, y, width/2, 0, Math.PI * 2, true);
                 break;
         }
+
+        // posMarker = "width :"+  width * markerScale/2  + "px; height :" +  width * markerScale /2 + "px ; left :" + (x -width * markerScale/2) + "px ;top : " + (y - -width * markerScale/2) +"px;";
+        posMarker = "width :"+  clickableLen  + "px; height :" +  clickableLen + "px ; left :" + (x -width * markerScale/2) + "px ;top : " + (y - -width * markerScale/2) +"px;";
+        var markerStyle = " style = 'background-color:transparent;border:0; position:absolute;z-index:3001;cursor:pointer;" + posMarker + "'";
+
         ctx.closePath();
         ctx.stroke();
         ctx.fill();
@@ -409,8 +421,10 @@ THE SOFTWARE.
                 break;
         }
         var style = (textClass != "" ? "class='" + textClass + "' " : "") + "style='" + (textClass == "" ? "font-size:8pt;font-family:Verdana,Arial,Helvetica,Sans Serif;text-decoration:none;" : "") + "width:100px;" + (pos != "" ? pos : "") + ";position:absolute;top:" + (y + el.offset().top - (topOffset > 0 ? topOffset : 0)) + "px;left:" + (x + el.offset().left) + "px;z-index:3000;'";
-        if (data.link != "")
+        if (data.link != ""){
             $("<a " + style + " title='" + data.title.replace(/\\n/g,"<br />") + "' href='" + data.link + "' target='_new'>" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
+            el.append("<Button" + markerStyle + " onclick=a();"  + " ></Button>");
+        }
         else
             $("<span " + style + ">" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
 
