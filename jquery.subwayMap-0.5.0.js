@@ -187,15 +187,17 @@ THE SOFTWARE.
                         if (title === undefined) title = "";
                     }
 
-                    self._debug("Coords=" + coords + "; Dir=" + dir + "; Link=" + link + "; Label=" + label + "; labelPos=" + labelPos + "; Marker=" + marker + "; Dotted=" + dotted);
+                    var icon = $(this).attr("data-icon");
+                    if (icon == undefined) icon = "";
 
+                    self._debug("Coords=" + coords + "; Dir=" + dir + "; Link=" + link + "; Label=" + label + "; labelPos=" + labelPos + "; Marker=" + marker + "; Dotted=" + dotted + "; Icon=" + icon);
                     var x = "";
                     var y = "";
                     if (coords.indexOf(",") > -1) {
                         x = Number(coords.split(",")[0]) + (marker.indexOf("interchange") > -1 ? 0 : shiftX);
                         y = Number(coords.split(",")[1]) + (marker.indexOf("interchange") > -1 ? 0 : shiftY);
                     }
-                    nodes[nodes.length] = { x: x, y: y, direction: dir, marker: marker, markerInfo: markerInfo, link: link, title: title, label: label, labelPos: labelPos, dotted: dotted };
+                    nodes[nodes.length] = { x: x, y: y, direction: dir, marker: marker, markerInfo: markerInfo, link: link, title: title, label: label, labelPos: labelPos, dotted: dotted, icon: icon };
                 });
                 if (nodes.length > 0)
                     self._drawLine(el, scale, rows, columns, color, (lineTextClass != "" ? lineTextClass : textClass), lineWidth, nodes, reverseMarkers);
@@ -340,40 +342,52 @@ THE SOFTWARE.
 
         if(width * markerScale/2 > 16) clickableLen = parseInt(width * markerScale/2);
         if(width * markerScale/2 > 24) clickableLen = 24;
-        switch(data.marker.toLowerCase())
-        {
-            case "interchange":
-            case "@interchange":
-                ctx.lineWidth = width;
-                if (data.markerInfo == "") ctx.arc(x, y, width * markerScale, 0, Math.PI * 2, true);
-                else
-                {
-                    var mDir = data.markerInfo.substr(0,1).toLowerCase();
-                    var mSize = parseInt(data.markerInfo.substr(1,10));
-                    if (((mDir == "v") || (mDir == "h")) && (mSize > 1))
-                    {
-                        if (mDir == "v")
-                        {
-                            ctx.arc(x, y, width * markerScale,290 * Math.PI/180, 250 * Math.PI/180, false);
-                            ctx.arc(x, y-(width*mSize), width * markerScale,110 * Math.PI/180, 70 * Math.PI/180, false);
-                        }
-                        else
-                        {
-                            ctx.arc(x, y, width * markerScale,20 * Math.PI/180, 340 * Math.PI/180, false);
-                            ctx.arc(x+(width*mSize), y, width * markerScale,200 * Math.PI/180, 160 * Math.PI/180, false);
-                        }
-                    }
-                    else
-                        ctx.arc(x, y, width * markerScale, 0, Math.PI * 2, true);
-                }
-                break;
-            case "station":
-            case "@station":
-                ctx.lineWidth = width/2;
-                ctx.arc(x, y, width/2, 0, Math.PI * 2, true);
-                break;
+
+        if(data.icon||data.icon != ""){
+         
+            var img=new Image();
+            img.src=data.icon;
+            img.onload = function(){
+                ctx.drawImage(img, x-img.width/2, y-img.height/2);
+            }
         }
 
+        else{
+            switch(data.marker.toLowerCase())
+            {
+                case "interchange":
+                case "@interchange":
+                    ctx.lineWidth = width;
+                    if (data.markerInfo == "") ctx.arc(x, y, width * markerScale, 0, Math.PI * 2, true);
+                    else
+                    {
+                        var mDir = data.markerInfo.substr(0,1).toLowerCase();
+                        var mSize = parseInt(data.markerInfo.substr(1,10));
+                        if (((mDir == "v") || (mDir == "h")) && (mSize > 1))
+                        {
+                            if (mDir == "v")
+                            {
+                                ctx.arc(x, y, width * markerScale,290 * Math.PI/180, 250 * Math.PI/180, false);
+                                ctx.arc(x, y-(width*mSize), width * markerScale,110 * Math.PI/180, 70 * Math.PI/180, false);
+                            }
+                            else
+                            {
+                                ctx.arc(x, y, width * markerScale,20 * Math.PI/180, 340 * Math.PI/180, false);
+                                ctx.arc(x+(width*mSize), y, width * markerScale,200 * Math.PI/180, 160 * Math.PI/180, false);
+                            }
+                        }
+                        else
+                            ctx.arc(x, y, width * markerScale, 0, Math.PI * 2, true);
+                    }
+                    break;
+                case "station":
+                case "@station":
+                    ctx.lineWidth = width/2;
+                    ctx.arc(x, y, width/2, 0, Math.PI * 2, true);
+                    break;
+            }
+        }
+       
         // posMarker = "width :"+  width * markerScale/2  + "px; height :" +  width * markerScale /2 + "px ; left :" + (x -width * markerScale/2) + "px ;top : " + (y - -width * markerScale/2) +"px;";
         posMarker = "width :"+  clickableLen  + "px; height :" +  clickableLen + "px ; left :" + (x -width * markerScale/2) + "px ;top : " + (y - -width * markerScale/2) +"px;";
         var markerStyle = " style = 'background-color:transparent;border:0; position:absolute;z-index:3001;cursor:pointer;" + posMarker + "'";
