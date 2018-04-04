@@ -1,0 +1,97 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Subway Map</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="../jquery.subwayMap-0.5.0.js"></script>
+    <style type="text/css">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Verdana;
+            font-size: 8pt;
+        }
+
+        /* The main DIV for the map */
+
+        .subway-map {
+            margin: auto;
+            width: 100%;
+            height: 410px;
+            background-color: white;
+        }
+
+        /* Text labels */
+
+        .text {
+            text-decoration: none;
+            color: rgb(134, 24, 24);
+            font-size: 14;
+            font-weight: bolder;
+        }
+
+        #legend {
+            float: left;
+            width: 250px;
+            height: 400px;
+        }
+
+        #legend div {
+            height: 25px;
+        }
+
+        #legend span {
+            margin: 5px 5px 5px 0;
+        }
+
+        .subway-map span {
+            margin: 5px 5px 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+      <canvas id="c" width="400" height="400"></canvas>
+
+
+    </div>
+</body>
+
+<script>
+
+var c = document.getElementById("c");
+var ctx = c.getContext("2d");
+var p1 = new Path2D();
+var p2 = new Path2D();
+var paths = [p1, p2];   // store paths in array for check later
+
+// store arc parts to respective path objects
+p1.arc(100, 75, 50, -0.1 * Math.PI, 1.7 * Math.PI);  // red part
+p2.arc(100, 75, 50, 1.7 * Math.PI, -0.1 * Math.PI);  // grey part
+
+// render the two path objects using a common context, but different style
+ctx.lineWidth = 15;
+
+ctx.strokeStyle = "#c32020";
+ctx.stroke(p1);
+
+ctx.strokeStyle = "#a9a9a9";
+ctx.stroke(p2);
+
+// check for clicks on common canvas
+c.onclick = function(e) {
+  var rect = this.getBoundingClientRect(),  // adjust click coordinates
+      x = e.clientX - rect.left,
+      y = e.clientY - rect.top;
+
+  // iterate through path array to test each path for hits
+  for(var i = 0; i < paths.length; i++) {
+    if (ctx.isPointInStroke(paths[i], x, y)) {      // check which path
+      console.log("Path " + (i+1) + " clicked");
+      break;
+    }
+  }
+};
+
+</script>
+
+</html>
