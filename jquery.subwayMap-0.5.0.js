@@ -187,10 +187,14 @@ THE SOFTWARE.
                         if (title === undefined) title = "";
                     }
 
+                    //station icon
                     var icon = $(this).attr("data-icon");
                     if (icon == undefined) icon = "";
+                    //station idendtity
+                    var id = $(this).attr("data-id");
+                    if (id == undefined) id = "";
 
-                    self._debug("Coords=" + coords + "; Dir=" + dir + "; Link=" + link + "; Label=" + label + "; labelPos=" + labelPos + "; Marker=" + marker + "; Dotted=" + dotted + "; Icon=" + icon);
+                    self._debug("Coords=" + coords + "; Dir=" + dir + "; Link=" + link + "; Label=" + label + "; labelPos=" + labelPos + "; Marker=" + marker + "; Dotted=" + dotted + "; Icon=" + icon + "; Id=" + id);
                     var x = "";
                     var y = "";
                     if (coords.indexOf(",") > -1) {
@@ -344,11 +348,21 @@ THE SOFTWARE.
         if(width * markerScale/2 > 24) clickableLen = 24;
 
         if(data.icon||data.icon != ""){
-         
             var img=new Image();
             img.src=data.icon;
+            $(this).css("cursor","pointer");
             img.onload = function(){
-                ctx.drawImage(img, x-img.width/2, y-img.height/2);
+                // ctx.drawImage(img, x-img.width/2, y-img.height/2,);
+                // icon size blocked (20 x 20)
+                ctx.drawImage(img, x-10, y-10, 20, 20);
+                //bind event
+                // $(this).click(function(){
+                //     alert("cddd");
+                // });
+                $(this).bind("click",function(){
+                    alert(1);
+                });
+                console.log("this>>",$(this));
             }
         }
 
@@ -437,7 +451,7 @@ THE SOFTWARE.
         var style = (textClass != "" ? "class='" + textClass + "' " : "") + "style='" + (textClass == "" ? "font-size:8pt;font-family:Verdana,Arial,Helvetica,Sans Serif;text-decoration:none;" : "") + "width:100px;" + (pos != "" ? pos : "") + ";position:absolute;top:" + (y + el.offset().top - (topOffset > 0 ? topOffset : 0)) + "px;left:" + (x + el.offset().left) + "px;z-index:3000;'";
         if (data.link != ""){
             $("<a " + style + " title='" + data.title.replace(/\\n/g,"<br />") + "' href='" + data.link + "' target='_new'>" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);
-            el.append("<Button" + markerStyle + " onclick=a();"  + " ></Button>");
+            // el.append("<Button" + markerStyle + " onclick=a();"  + " ></Button>");
         }
         else
             $("<span " + style + ">" + data.label.replace(/\\n/g,"<br />") + "</span>").appendTo(el);

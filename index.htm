@@ -83,7 +83,7 @@
             <li data-coords="8,3" data-dir="E"></li>
             <li data-coords="8,2"></li>
             <li data-coords="9,1" data-dir="N"></li>
-            <li data-coords="10,2" data-dir="E" data-marker="interchange" data-icon="./images/station.png" data-markerInfo="v15" data-labelPos="E" data-id="qd111101">
+            <li data-coords="10,2" data-dir="E" data-marker="interchange" data-icon="./images/turn.png" data-markerInfo="v15" data-labelPos="E" data-id="qd111101">
                 <a href="http://jqueryui.com/demos/button/">Button</a>
             </li>
             <li data-coords="10,5"></li>
@@ -110,12 +110,17 @@
 
     <script type="text/javascript">
 
+        $('body').on('contextmenu', 'canvas', function(e){ return false; });
         function a(arg){
             alert("a function");
             // console.log(arg);
         }
 
         $(".subway-map").subwayMap({ debug: true });
+        //disable  contextmenu
+        $('body').on('contextmenu', 'canvas', function(e){ return true; });
+        $('body').on('contextmenu', 'a', function(e){ return false; });
+
     </script>
 </body>
 
