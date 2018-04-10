@@ -60,7 +60,7 @@
     <div class="subway-map" data-columns="30" data-rows="20" data-cellSize="40" data-legendId="legend" data-textClass="text"
         data-gridNumbers="true" data-grid="true" data-lineWidth="6">
         <ul data-color="#ff4db2" data-label="jQuery Widgets">
-            <li data-coords="2,2" data-marker="interchange">
+           <!--  <li data-coords="2,2" data-marker="interchange">
                 <a href="http://jqueryui.com/demos/accordion/">Accordion</a>
             </li>
             <li data-coords="4,2">
@@ -72,7 +72,7 @@
                 <a href="http://jqueryui.com/demos/slider/">Slider</a>
             </li>
             <!-- marker-only node -->
-            <li data-coords="6,4" data-dir="S" data-marker="interchange" data-markerInfo="h5">
+            <!-- <li data-coords="6,4" data-dir="S" data-marker="interchange" data-markerInfo="h5">
                 <a href="http://jqueryui.com/demos/datepicker/">Date\npicker</a>
             </li>
             <li data-coords="7,4"></li>
@@ -80,7 +80,7 @@
                 <a href="http://jqueryui.com/demos/dialog/">Dialog</a>
             </li>
             <!-- marker-only node, moved to the right by 0.15 -->
-            <li data-coords="8,3" data-dir="E"></li>
+           <!--  <li data-coords="8,3" data-dir="E"></li>
             <li data-coords="8,2"></li>
             <li data-coords="9,1" data-dir="N"></li>
             <li data-coords="10,2" data-dir="E" data-marker="interchange" data-icon="./images/turn.png" data-markerInfo="v15" data-labelPos="E" data-id="qd111101">
@@ -90,8 +90,8 @@
             <li data-coords="9,6" data-dir="S" data-marker="station" data-icon="./images/exchange.png">
                 <a href="http://jqueryui.com/demos/progressbar/">Progress\nbar</a>
             </li>
-            <li data-coords="6,9"></li>
-            <li data-coords="5,8" data-dir="W"></li>
+            <li data-coords="6,9"></li> --> -->
+            <li data-coords="5,8" data-dir="W"></li> -->
             <li data-coords="5,7"></li>
             <li data-coords="4,6" data-marker="station" data-dir="N"></li>
 
@@ -110,16 +110,53 @@
 
     <script type="text/javascript">
 
-        $('body').on('contextmenu', 'canvas', function(e){ return false; });
-        function a(arg){
-            alert("a function");
-            // console.log(arg);
-        }
+        // $('body').on('contextmenu', 'canvas', function(e){ return false; });
+        // function a(arg){
+        //     alert("a function");
+        //     // console.log(arg);
+        // }
 
         $(".subway-map").subwayMap({ debug: true });
         //disable  contextmenu
-        $('body').on('contextmenu', 'canvas', function(e){ return true; });
-        $('body').on('contextmenu', 'a', function(e){ return false; });
+        $('body').on('contextmenu', 'canvas', function(e){ return false; });
+
+
+         function scaleCanvas(event){  
+            event.preventDefault();  
+            var e = window.event || event; // old IE support  
+            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));  
+            console.log(delta+"->"+ e.wheelDelta+'->'+ e.detail);  
+        }
+
+        var canvas;
+        $(document).ready(function(){ 
+          canvas=$('canvas')[0].getContext('2d');
+          canvas.fillRect(10,10,100,100); 
+          console.log(canvas);
+
+         var canvasCtr =$('canvas')[0];  
+
+         if (canvasCtr.addEventListener) {  
+          
+            // IE9, Chrome, Safari, Opera  
+            canvasCtr.addEventListener("mousewheel", scaleCanvas, false);  
+            // Firefox  
+            canvasCtr.addEventListener("DOMMouseScroll", scaleCanvas, false);  
+        }else{  
+            // IE 6/7/8  
+            canvasCtr.attachEvent("onmousewheel", scaleCanvas);  
+        }  
+        
+        $('canvas').eq(0).mousemove(function(e){
+            // console.log("move");
+            // console.log(e);
+            // console.log(e.clientX);
+            // console.log(e.clientY);
+        });
+
+        $('canvas').bind('mousewheel',function(){ console.log("acc")});
+
+        });
 
     </script>
 </body>
